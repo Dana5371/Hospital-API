@@ -1,9 +1,14 @@
 from django.shortcuts import get_object_or_404, render
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.status import status
+from rest_framework import status
 from django.contrib.auth import get_user_model
-from account.serializers import RegisterSerializer
+from account.serializers import LoginSerializer, RegisterSerializer
+
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
+# Create your views here.
 # Create your views here.
 class RegisterView(APIView):
     def post(self, request):
@@ -22,3 +27,14 @@ class ActivateView(APIView):
         user.save()
         return Response('Your account successfully activated!', status=status.HTTP_200_OK)
 
+class LoginView(ObtainAuthToken):
+    serializer_class = LoginSerializer
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated,]
+
+    def post(self, request):
+        user = request.user
+        Token.objects.filter(user=user).delete()
+        return Response('Successfully logged out', status=status.HTTP_200_OK)

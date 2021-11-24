@@ -3,5 +3,6 @@ psycopg2-binary
 Pillow
 djangorestframework
 python-decouple
+celery
 
 

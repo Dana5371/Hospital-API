@@ -1,8 +1,8 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from account.models import User, send_activation_code 
+from account.models import User
+from .utils import send_activation_code
 
-# from .utils import send_activation_code
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -27,3 +27,26 @@ class RegisterSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(email=email, password=password)
         send_activation_code(email=user.email, activation_code=user.activation_code)
         return user
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(label='Password', style={'input_type': 'password'},
+     trim_whitespace=False)
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if email and password:
+            user = authenticate(request=self.context.get('request'), email=email,
+            password=password)
+            
+            if not user:
+                message = 'Unable to log in with provided credentials'
+                raise serializers.ValidationError(message, code='authorization')
+        else:
+            message = 'Must include "email" and "password".'
+            raise serializers.ValidationError(message, code='authorization')
+
+        attrs['user'] = user
+        return attrs

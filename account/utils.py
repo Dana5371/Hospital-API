@@ -1,16 +1,15 @@
+from celery import shared_task
 from django.core.mail import send_mail
 
+@shared_task
 def send_activation_code(email, activation_code):
-    activation_url = f"http://localhost:8000/v1/api/account/activate/{activation_code}"
-    message = f"""
-    Thanks you for signing up.
-    Please, click here and you will be activate your account.
-    Activation link: {activation_url}
-"""
+
+    message = f"""Спасибо за регистрацию.Активируйте свой аккаунт по ссылке:
+    http://127.0.0.1:8000/v1/api/account/activate/{activation_code}"""
     send_mail(
-        'Activate your account',
+        'Активация аккаунта',
         message,
-        'hospital@gmail.com',
+        'test@myproject.com',
         [email, ],
         fail_silently=False
     )

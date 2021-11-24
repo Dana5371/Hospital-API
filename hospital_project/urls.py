@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 from main.views import *
 from rest_framework.routers import DefaultRouter
 
+
 router = DefaultRouter()
 router.register('health_problems', HealthProblemViewSet)
 router.register('answers', AnswerViewSet)
@@ -31,6 +32,7 @@ urlpatterns = [
     path('v1/api/doctors/',  DoctorListlView.as_view()),
     path('v1/api/doctors/<int:pk>/',  DoctorDetailView.as_view()),
     path('v1/api/',  include(router.urls)), 
+    path('v1/api/account/', include('account.urls')),
 
 
 
