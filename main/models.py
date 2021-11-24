@@ -25,7 +25,7 @@ class HealthProblem(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='health')
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='health')
     title = models.CharField(max_length=300)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='healthproblems', blank=True)
     description = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
 
