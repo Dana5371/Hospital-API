@@ -74,8 +74,20 @@ class AnswerViewSet(ModelViewSet):
     serializer_class = AnswerSerializer
 
 
+
 class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+
+class RatingViewSet(ModelViewSet):
+    queryset = Rating.objects.all()
+    serializer_class = RatingSerializer
+    permission_classes = [IsAuthenticated, ]
+
+# class LikesViewSet(ModelViewSet):
+#     queryset = Likes.objects.all()
+#     serializer_class = LikesSerializer
+#     permission_classes = [IsAuthenticated, ]
+
 
     

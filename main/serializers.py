@@ -10,6 +10,7 @@ class DoctorSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        representation['rating'] = RatingSerializer(instance.rating, many=True).data
         action = self.context.get('action')
         if action == 'list':
             representation['health_problem'] = instance.health.count()
@@ -53,7 +54,7 @@ class HealthProblemSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['author'] = instance.author.email
-
+        # representation['likes'] = LikesSerializer(instance.likes.all(), many=True).data
         action = self.context.get('action')
         if action == 'list':
             representation['answer'] = instance.answer.count()
@@ -64,37 +65,89 @@ class HealthProblemSerializer(serializers.ModelSerializer):
 
 
 class AnswerSerializer(serializers.ModelSerializer):
-    # author = serializers.ReadOnlyField(source='author.username')
+    created = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
 
     class Meta:
         model = Answer
-        fields = '__all__'
+        exclude = ('author',)
 
-    # def create(self, validated_data):
-    #     request = self.context.get('request')
-    #     answer = Answer.objects.create(author=request.user, **validated_data)
-    #     return answer
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user_id = request.user.id
+        validated_data['author_id'] = user_id
+        problem = Answer.objects.create(**validated_data)
+        return problem
+
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['comments'] = CommentSerializer(instance.comments.all(), many=True).data
+        representation['author'] = instance.author.email
         return representation
 
 class CommentSerializer(serializers.ModelSerializer):
-    # author = serializers.ReadOnlyField(source='author.username')
+    created = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
 
     class Meta:
         model = Comment
+        exclude = ('author',)
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user_id = request.user.id
+        validated_data['author_id'] = user_id
+        problem = Comment.objects.create(**validated_data)
+        return problem
+
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['author'] = instance.author.email
+        return representation
+
+
+
+
+
+class RatingSerializer(serializers.ModelSerializer):
+
+    author = serializers.ReadOnlyField(source='author.email')
+
+    class Meta:
+        model = Rating
         fields = '__all__'
 
-    # def create(self, validated_data):
-    #     request = self.context.get('request')
-    #     comment = Comment.objects.create(author=request.user, **validated_data)
-    #     return comment
 
+    def create(self, validated_data):
+        request = self.context.get('request')
+        author = request.user
+        doctor = validated_data.get('doctor')
+        print(validated_data)
+        rating = Rating.objects.get_or_create(author=author, doctor=doctor)[0]
+        rating.rating = validated_data['rating']
+        rating.save()
+        return rating
     
 
-
+# class LikesSerializer(serializers.ModelSerializer):
+#
+#
+#     class Meta:
+#         model = Likes
+#          exclude = ('author',)
+#
+#
+#     def create(self, validated_data):
+#         request = self.context.get('request')
+#         user_id = request.user.id
+#         validated_data['author_id'] = user_id
+#         problem = HealthProblem.objects.create(**validated_data)
+#         return problem
+#
+#     def to_representation(self, instance):
+#         representation = super().to_representation(instance)
+#         representation['author'] = instance.author.email
+#         return representation
 
    
   
