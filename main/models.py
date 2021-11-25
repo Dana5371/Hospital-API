@@ -60,12 +60,12 @@ class Rating(models.Model):
     def __str__(self):
         return str(self.rating)
 
-# class Likes(models.Model):
-#     likes = models.BooleanField(default=False)
-#     health_problem = models.ForeignKey(HealthProblem, on_delete=models.CASCADE, related_name='likes')
-#     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
-#
-#
-#
-#     def __str__(self):
-#         return str(self.likes)
+class Likes(models.Model):
+    likes = models.BooleanField(default=False)
+    health_problem = models.ForeignKey(HealthProblem, on_delete=models.CASCADE, related_name='likes')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+
+
+
+    def __str__(self):
+        return str(self.likes)

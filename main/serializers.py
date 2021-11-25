@@ -1,4 +1,3 @@
-from django.db.models import fields
 from rest_framework import serializers
 from .models import *
 
@@ -42,19 +41,11 @@ class HealthProblemSerializer(serializers.ModelSerializer):
         problem = HealthProblem.objects.create(**validated_data)
         return problem
 
-    # def update(self, instance, validated_data):
-    #     request = self.context.get('request')
-    #     for key, value in validated_data.items():
-    #         setattr(instance, key, value)
-    #     images_data = request.FILES
-    #     instance.image.all().delete()
-    #     return instance
-
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['author'] = instance.author.email
-        # representation['likes'] = LikesSerializer(instance.likes.all(), many=True).data
+        representation['likes'] = instance.likes.all().count()
         action = self.context.get('action')
         if action == 'list':
             representation['answer'] = instance.answer.count()
@@ -129,25 +120,28 @@ class RatingSerializer(serializers.ModelSerializer):
         return rating
     
 
-# class LikesSerializer(serializers.ModelSerializer):
-#
-#
-#     class Meta:
-#         model = Likes
-#          exclude = ('author',)
-#
-#
-#     def create(self, validated_data):
-#         request = self.context.get('request')
-#         user_id = request.user.id
-#         validated_data['author_id'] = user_id
-#         problem = HealthProblem.objects.create(**validated_data)
-#         return problem
-#
-#     def to_representation(self, instance):
-#         representation = super().to_representation(instance)
-#         representation['author'] = instance.author.email
-#         return representation
+class LikesSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = Likes
+        exclude = ('author', )
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        author = request.user
+        health_problem = validated_data.get('health_problem')
+        like = Likes.objects.get_or_create(author=author, health_problem=health_problem)[0]
+        like.likes = True if like.likes is False else False
+        like.save()
+        return like
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['author'] = instance.author.email
+        return representation
+
+
 
    
   

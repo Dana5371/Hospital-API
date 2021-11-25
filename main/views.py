@@ -84,10 +84,10 @@ class RatingViewSet(ModelViewSet):
     serializer_class = RatingSerializer
     permission_classes = [IsAuthenticated, ]
 
-# class LikesViewSet(ModelViewSet):
-#     queryset = Likes.objects.all()
-#     serializer_class = LikesSerializer
-#     permission_classes = [IsAuthenticated, ]
+class LikesViewSet(ModelViewSet):
+    queryset = Likes.objects.all()
+    serializer_class = LikesSerializer
+    permission_classes = [IsAuthenticated, ]
 
 
     

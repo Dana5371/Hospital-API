@@ -41,7 +41,7 @@ router.register('health_problems', HealthProblemViewSet)
 router.register('answers', AnswerViewSet)
 router.register('comments', CommentViewSet)
 router.register('rating', RatingViewSet)
-# router.register('likes', LikesViewSet)
+router.register('likes', LikesViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
