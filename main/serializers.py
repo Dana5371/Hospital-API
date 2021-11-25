@@ -27,30 +27,32 @@ class DepartmentSerializer(serializers.ModelSerializer):
    
 
 class HealthProblemSerializer(serializers.ModelSerializer):
-    created_at = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
+    created = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
     
     class Meta:
         model = HealthProblem
-        exclude = ('author', )
+        exclude = ('author',)
 
 
     def create(self, validated_data):
         request = self.context.get('request')
-        author = request.user
-        problem = HealthProblem.objects.create(author=author, **validated_data)
+        user_id = request.user.id
+        validated_data['author_id'] = user_id
+        problem = HealthProblem.objects.create(**validated_data)
         return problem
 
-    def update(self, instance, validated_data):
-        request = self.context.get('request')
-        for key, value in validated_data.items():
-            setattr(instance, key, value)
-        images_data = request.FILES
-        instance.image.all().delete()
-        return instance
+    # def update(self, instance, validated_data):
+    #     request = self.context.get('request')
+    #     for key, value in validated_data.items():
+    #         setattr(instance, key, value)
+    #     images_data = request.FILES
+    #     instance.image.all().delete()
+    #     return instance
 
-        
+
     def to_representation(self, instance):
         representation = super().to_representation(instance)
+        representation['author'] = instance.author.email
 
         action = self.context.get('action')
         if action == 'list':
