@@ -65,7 +65,10 @@ class Likes(models.Model):
     health_problem = models.ForeignKey(HealthProblem, on_delete=models.CASCADE, related_name='likes')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
 
-
-
     def __str__(self):
         return str(self.likes)
+
+class Favorite(models.Model):
+    health_problem = models.ForeignKey(HealthProblem, on_delete=models.CASCADE, related_name='favourites')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favourites')
+    favorite = models.BooleanField(default=True)

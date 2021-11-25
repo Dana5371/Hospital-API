@@ -11,10 +11,7 @@ class DoctorSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['rating'] = RatingSerializer(instance.rating, many=True).data
         action = self.context.get('action')
-        if action == 'list':
-            representation['health_problem'] = instance.health.count()
-        else:
-            representation['health_problem'] = HealthProblemSerializer(instance.health.all(), many=True).data
+        representation['health_problem'] = HealthProblemSerializer(instance.health.all(), many=True).data
         return representation
 
 
@@ -141,6 +138,17 @@ class LikesSerializer(serializers.ModelSerializer):
         representation['author'] = instance.author.email
         return representation
 
+class FavoriteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Favorite
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['user'] = instance.user.email
+        representation['health_problem'] = instance.health_problem.title
+        return representation
 
 
    

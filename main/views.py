@@ -69,6 +69,27 @@ class HealthProblemViewSet(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['get'])
+    def favorites(self, request):
+        queryset = Favorite.objects.all()
+        queryset = queryset.filter(user=request.user)
+        serializer = FavoriteSerializer(queryset, many=True, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
+    def favorite(self, request, pk=None):
+        health_problem = self.get_object()
+        obj, created = Favorite.objects.get_or_create(user=request.user, health_problem=health_problem)
+        if not created:
+            obj.favorite = not obj.favorite
+            obj.save()
+        favorites = 'added to favorites' if obj.favorite else 'removed to favorites'
+
+        return Response('Successfully {} !'.format(favorites), status=status.HTTP_200_OK)
+
+    def get_serializer_context(self):
+        return {'request': self.request, 'action': self.action}
+
 class AnswerViewSet(ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
