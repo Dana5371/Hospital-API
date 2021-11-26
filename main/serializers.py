@@ -10,7 +10,6 @@ class DoctorSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['rating'] = RatingSerializer(instance.rating, many=True).data
-        action = self.context.get('action')
         representation['health_problem'] = HealthProblemSerializer(instance.health.all(), many=True).data
         return representation
 

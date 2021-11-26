@@ -5,4 +5,5 @@ djangorestframework
 python-decouple
 celery
 drf-yasg
+redis
 

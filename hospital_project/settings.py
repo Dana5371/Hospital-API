@@ -158,3 +158,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 3
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6380'
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6380"
