@@ -159,5 +159,5 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 3
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6380'
-CELERY_RESULT_BACKEND = "redis://127.0.0.1:6380"
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379"
