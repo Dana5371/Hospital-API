@@ -6,7 +6,7 @@ def send_confirmation_code(email, activation_code):
 
     message = f"""Спасибо за регистрацию.
     Активируйте свой аккаунт по ссылке:
-    http://127.0.0.1:8000/v1/api/account/activate/{activation_code}"""
+    http://127.0.0.1:3000/v1/api/account/activate/{activation_code}"""
     send_mail(
         'Активация аккаунта',
         message,

@@ -84,7 +84,6 @@ class HealthProblemViewSet(ModelViewSet):
             obj.favorite = not obj.favorite
             obj.save()
         favorites = 'added to favorites' if obj.favorite else 'removed to favorites'
-
         return Response('Successfully {} !'.format(favorites), status=status.HTTP_200_OK)
 
     def get_serializer_context(self):
