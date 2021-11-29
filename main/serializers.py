@@ -149,7 +149,9 @@ class FavoriteSerializer(serializers.ModelSerializer):
         representation['health_problem'] = instance.health_problem.title
         return representation
 
-
+class ParsingSerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=500)
+    description = serializers.CharField(max_length=1000)
    
   
 

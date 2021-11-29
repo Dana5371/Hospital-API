@@ -1,5 +1,5 @@
 from datetime import timedelta
-
+from .parsing import main
 from django.shortcuts import render
 from django.utils import timezone
 from rest_framework import generics, serializers, status
@@ -110,4 +110,9 @@ class LikesViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated, ]
 
 
-    
+class ParsingView(APIView):
+    def get(self, request):
+        parsing = main()
+
+        serializer = ParsingSerializer(instance=parsing, many=True)
+        return Response(serializer.data)

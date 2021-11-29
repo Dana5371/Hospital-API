@@ -51,7 +51,7 @@ urlpatterns = [
     path('v1/api/doctors/<int:pk>/',  DoctorDetailView.as_view()),
     path('v1/api/',  include(router.urls)), 
     path('v1/api/account/', include('account.urls')),
-
+    path('v1/api/advise/', ParsingView.as_view()),
 
 
 

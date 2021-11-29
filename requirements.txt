@@ -6,4 +6,7 @@ python-decouple
 celery
 drf-yasg
 redis
+django-modeltranslation
+bs4
+requests    
 
