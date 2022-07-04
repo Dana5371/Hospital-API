@@ -26,8 +26,6 @@ class UserManager(BaseUserManager):
         return user
 
 
-
-
 class User(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
