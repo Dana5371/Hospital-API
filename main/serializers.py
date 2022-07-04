@@ -14,13 +14,11 @@ class DoctorSerializer(serializers.ModelSerializer):
         return representation
 
 
-
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
         fields = '__all__'
 
-   
 
 class HealthProblemSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
@@ -65,13 +63,13 @@ class AnswerSerializer(serializers.ModelSerializer):
         problem = Answer.objects.create(**validated_data)
         return problem
 
-
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['comments'] = CommentSerializer(instance.comments.all(), many=True).data
         representation['author'] = instance.author.email
         return representation
 
+    
 class CommentSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(format='%d/%m/%Y %H:%M:%S', read_only=True)
 
@@ -93,11 +91,7 @@ class CommentSerializer(serializers.ModelSerializer):
         return representation
 
 
-
-
-
 class RatingSerializer(serializers.ModelSerializer):
-
     author = serializers.ReadOnlyField(source='author.email')
 
     class Meta:
@@ -117,7 +111,6 @@ class RatingSerializer(serializers.ModelSerializer):
     
 
 class LikesSerializer(serializers.ModelSerializer):
-
 
     class Meta:
         model = Likes
@@ -152,14 +145,4 @@ class FavoriteSerializer(serializers.ModelSerializer):
 class ParsingSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=500)
     description = serializers.CharField(max_length=1000)
-   
-  
-
-
-
-
- 
-
-
-            
-
+    
