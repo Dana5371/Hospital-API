@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models.fields.files import ImageField
 from account.models import User
 
-# Create your models here.
+
 class Department(models.Model):
     slug = models.SlugField(max_length=100, primary_key=True)
     name = models.CharField(max_length=150, unique=True)
@@ -11,6 +11,7 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
+    
 class Doctor(models.Model):
     image = models.ImageField(upload_to='doctors')
     name = models.CharField(max_length=100, unique=True)
@@ -21,6 +22,7 @@ class Doctor(models.Model):
     def __str__(self):
         return f"{self.name} {self.last_name}"
 
+    
 class HealthProblem(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='health')
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='health')
@@ -43,6 +45,7 @@ class Answer(models.Model):
     def __str__(self):
         return f'{self.author}: {self.answer[:20]}'
 
+    
 class Comment(models.Model):
     comment = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
@@ -52,6 +55,7 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment
 
+    
 class Rating(models.Model):
     rating = models.IntegerField(default=0)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, related_name='rating')
@@ -60,6 +64,7 @@ class Rating(models.Model):
     def __str__(self):
         return str(self.rating)
 
+    
 class Likes(models.Model):
     likes = models.BooleanField(default=False)
     health_problem = models.ForeignKey(HealthProblem, on_delete=models.CASCADE, related_name='likes')
@@ -68,7 +73,9 @@ class Likes(models.Model):
     def __str__(self):
         return str(self.likes)
 
+    
 class Favorite(models.Model):
     health_problem = models.ForeignKey(HealthProblem, on_delete=models.CASCADE, related_name='favourites')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='favourites')
     favorite = models.BooleanField(default=True)
+    
