@@ -27,7 +27,9 @@ schema_view = get_schema_view(
    openapi.Info(
       title="Online Сonsultation",
       default_version='v1',
-      description="Test description",
+      description="Test description",​
+98
+
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="contact@snippets.local"),
       license=openapi.License(name="BSD License"),
@@ -52,9 +54,5 @@ urlpatterns = [
     path('v1/api/',  include(router.urls)), 
     path('v1/api/account/', include('account.urls')),
     path('v1/api/advise/', ParsingView.as_view()),
-
-
-
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
