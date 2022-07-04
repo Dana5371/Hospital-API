@@ -12,7 +12,8 @@ from rest_framework.decorators import action
 from django.db.models import Q
 from rest_framework.response import Response
 from .permissions import IsHealthProblemAuthor
-# Create your views here.
+
+
 class DepartmentListView(generics.ListAPIView):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
@@ -23,11 +24,13 @@ class DoctorListlView(generics.ListAPIView):
     serializer_class = DoctorSerializer
     permission_classes = [AllowAny, ]
 
+    
 class DoctorDetailView(generics.RetrieveAPIView):
     queryset = Doctor.objects.all()
     serializer_class = DoctorSerializer
     permission_classes = [IsAuthenticated, ]
 
+    
 class HealthProblemViewSet(ModelViewSet):
     queryset = HealthProblem.objects.all()
     serializer_class = HealthProblemSerializer
@@ -39,8 +42,6 @@ class HealthProblemViewSet(ModelViewSet):
         else:
             permissions = [IsAuthenticated, ]
         return [permission() for permission in permissions]
-
-
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -89,21 +90,23 @@ class HealthProblemViewSet(ModelViewSet):
     def get_serializer_context(self):
         return {'request': self.request, 'action': self.action}
 
+    
 class AnswerViewSet(ModelViewSet):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
 
-
-
+    
 class CommentViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    
 class RatingViewSet(ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
     permission_classes = [IsAuthenticated, ]
 
+    
 class LikesViewSet(ModelViewSet):
     queryset = Likes.objects.all()
     serializer_class = LikesSerializer
