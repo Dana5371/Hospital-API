@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup as BS
 
 import csv
+
 def get_html(url):
     headers = {"User-Agent": "Mozilla/5.0 (X11; U; Linux i686) Gecko/20071127 Firefox/2.0.0.11"}
     response = requests.get(url, headers=headers)
@@ -26,17 +27,14 @@ def get_data(html):
         data = {
             'title': title,
             'description': description,
-        
-        }    
+               }    
          
         h.append(data)
     return h
      
-
 
 def main():
     url = 'https://www.amway.ru/sovety/poleznye-sovety-dlya-zdorovya'
     html = get_html(url)
     r = get_data(html)
     return r
-
